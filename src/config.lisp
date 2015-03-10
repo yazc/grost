@@ -20,7 +20,8 @@
 (defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
 
 (defconfig :common
-  `(:databases ((:maindb :sqlite3 :database-name ":memory:"))))
+    `(:databases ((:maindb :sqlite3 :database-name ":memory:")
+		  (:grostdb :mysql :database-name "grostdb" :host "127.0.0.1" :username "grostuser" :password "password"))))
 
 (defconfig |development|
   '())

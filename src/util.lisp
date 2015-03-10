@@ -179,18 +179,3 @@
 	  (password+salt->sha512 s salt :prefix prefix :suffix suffix :stretch stretch :n (1+ n))))))
 
 ;;; -*- end of file. -*-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
