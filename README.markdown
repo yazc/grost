@@ -7,11 +7,8 @@
 
 
 ## Installation
-`quicklisp`の`local-projects`に入れて
-```cl:
-(ql:quickload :grost)
-```
-してください。
+
+
 
 ## Author
 
