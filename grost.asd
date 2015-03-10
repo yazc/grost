@@ -6,11 +6,12 @@
 (defsystem grost
   :version "0.1"
   :author "yaz"
-  :license ""
+  :license "LLGPL"
   :depends-on (:clack
                :caveman2
                :envy
                :cl-ppcre
+	       :cl-interpol
 
                ;; for @route annotation
                :cl-syntax-annot
@@ -20,13 +21,24 @@
 
                ;; for DB
                :datafly
-               :sxql)
+               :sxql
+	       :integral
+
+	       ;; server
+	       :hunchentoot
+	       :woo
+
+	       ;; util
+	       :ironclad
+	       :local-time
+	       :mt19937)
   :components ((:module "src"
                 :components
-                ((:file "main" :depends-on ("config" "view" "db"))
-                 (:file "web" :depends-on ("view"))
-                 (:file "view" :depends-on ("config"))
-                 (:file "db" :depends-on ("config"))
-                 (:file "config"))))
+                ((:file "main" :depends-on ("config" "view" "db" "util"))
+                 (:file "web" :depends-on ("view" "util"))
+                 (:file "view" :depends-on ("config" "util"))
+                 (:file "db" :depends-on ("config" "util"))
+                 (:file "config" :depends-on ("util"))
+		 (:file "util"))))
   :description ""
   :in-order-to ((test-op (load-op grost-test))))
