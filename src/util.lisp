@@ -166,7 +166,10 @@
    (loop :repeat length
 	 :collect (let ((result nil))
 		    (loop (if (not (null result)) (return result))
-			  (setf result (code-char (mt19937:random 1114111))))))
+			  (setf result
+				(code-char
+				 #+ccl (mt19937:random 1114111)
+				 #-ccl (mt19937:random 43328))))))
    'string))
 
 @export
