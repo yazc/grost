@@ -1,3 +1,4 @@
+;;; -*- mode: common-lisp -*-
 (in-package :cl-user)
 (defpackage grost.db
   (:use :cl)
@@ -19,6 +20,7 @@
 		:limit)
   (:import-from :integral
                 :table-definition
+		:ensure-table-exists
 		:execute-sql
 		:connect-toplevel
 		:<dao-table-class>
@@ -38,7 +40,8 @@
 ;;; 準備
 ;;; CREATE USER grostuser IDENTIFIED BY 'password';
 ;;; CREATE SCHEMA IF NOT EXISTS `grostdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-;;; GRANT ALL PRIVILEGES ON userdb.* TO grostuser@localhost IDENTIFIED BY 'password';
+;;; GRANT ALL PRIVILEGES ON grostdb.* TO 'grostuser'@'localhost' IDENTIFIED BY 'password';
+;;; GRANT ALL PRIVILEGES ON grostdb.* TO 'grostuser'@'127.0.0.1' IDENTIFIED BY 'password';
 ;;; (:grostdb :mysql :database-name "grostdb" :host "127.0.0.1" :username "grostuser" :passwword "password")
 
 (defclass session-table ()
@@ -94,6 +97,7 @@
 (connect-toplevel :mysql
 		  :database-name "grostdb"
 		  :username "grostuser"
+		  :host "127.0.0.1"
 		  :password "password")
 
 
