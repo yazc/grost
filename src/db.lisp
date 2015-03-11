@@ -37,22 +37,16 @@
 
 ;; (setf integral:*auto-migration-mode* t)
 
-;;; Ê∫ñÂÇô
+;;; èÄîı
 ;;; CREATE USER grostuser IDENTIFIED BY 'password';
 ;;; CREATE SCHEMA IF NOT EXISTS `grostdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 ;;; GRANT ALL PRIVILEGES ON grostdb.* TO 'grostuser'@'localhost' IDENTIFIED BY 'password';
-;;; GRANT ALL PRIVILEGES ON grostdb.* TO 'grostuser'@'127.0.0.1' IDENTIFIED BY 'password';
+;;; -- GRANT ALL PRIVILEGES ON grostdb.* TO 'grostuser'@'127.0.0.1' IDENTIFIED BY 'password';
 ;;; (:grostdb :mysql :database-name "grostdb" :host "127.0.0.1" :username "grostuser" :passwword "password")
-
-(defclass session-table ()
-  ((sessionid :type (varchar 180)
-	      :primary-key t
-	      :initarg :sessionid
-	      :accessor sessionid)
-   (session_data :type longtext
-		 :initarg :session_data
-		 :accessor session_data))
-  (:metaclass <dao-table-class>))
+(connect-toplevel :mysql
+		  :database-name "grostdb"
+		  :username "grostuser"
+		  :password "password")
 
 (defclass user-table ()
   ((userno :type integer
@@ -68,9 +62,12 @@
    (password :type (varchar 2048)
 	     :initarg :password
 	     :accessor password)
-   (passwordhint :type longtext
-		 :initarg :password-hint
-		 :accessor passwordhint)
+   (password-salt :type (varchar 2048)
+   		  :initarg :password-salt
+   		  :accessor password-salt)
+   (password-hint :type longtext
+		  :initarg :password-hint
+		  :accessor password-hint)
    (status :type (varchar 180)
 	   :initform "Normal"
 	   :initarg :status
@@ -94,23 +91,29 @@
 	  :accessor phone))
   (:metaclass <dao-table-class>))
 
-(connect-toplevel :mysql
-		  :database-name "grostdb"
-		  :username "grostuser"
-		  :host "127.0.0.1"
-		  :password "password")
+(defclass session-table ()
+  ((sessionid :type (varchar 180)
+	      :primary-key t
+	      :initarg :sessionid
+	      :accessor sessionid)
+   (session-data :type longtext
+		 :initarg :session-data
+		 :accessor session-data))
+  (:metaclass <dao-table-class>))
+
+(defun create-table (class)
+  (execute-sql (table-definition class)))
 
 
 
 
 
 
+;;; datafly
 (defun connection-settings (&optional (db :maindb))
   (cdr (assoc db (config :databases))))
-
 (defun db (&optional (db :maindb))
   (apply #'connect-cached (connection-settings db)))
-
 (defmacro with-connection (conn &body body)
   `(let ((*connection* ,conn))
      ,@body))
