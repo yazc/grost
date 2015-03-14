@@ -6,7 +6,7 @@
 (defsystem grost
   :version "0.1"
   :author "yaz"
-  :license "LLGPL"
+  :license ""
   :depends-on (:clack
                :caveman2
                :envy
