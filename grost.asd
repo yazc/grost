@@ -12,6 +12,7 @@
                :envy
                :cl-ppcre
 	       :cl-interpol
+	       :drakma
 
                ;; for @route annotation
                :cl-syntax-annot
